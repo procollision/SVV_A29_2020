@@ -8,8 +8,6 @@ def integrate(func,dt,bounds):
         ix_list[i]=(func(x_list[i])+func(x_list[i+1]))/2*dt
     for i in range(1,len(ix_list)):
         ix_list[i] += ix_list[i-1]
-    plt.plot(x_list[:-1],ix_list)
-    plt.show()
     return ix_list
 
 
