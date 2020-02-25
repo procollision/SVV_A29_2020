@@ -5,16 +5,10 @@ Created on Wed Feb 19 16:37:51 2020
 @author: Luuk van der Mark
 """
 import numpy as np
+from aircraft_data import *
 
-def I_zz(h_a, C_a, t_sk, h_st, w_st, t_st, N_st, t_sp, st_cord, cg):
-    
-    h_a = h_a/100
-    t_sk = t_sk/1000
-    h_st = h_st/100
-    w_st = w_st/100
-    t_st = t_st/1000
-    t_sp = t_sp/1000
-    
+def I_zz(st_cord, cg):
+
     # Create a list to store all elements which need to be summed.
     I_zz = []
     # Defines the list for the z coordinates of the stringers and the z location of the cg.
@@ -52,14 +46,8 @@ def I_zz(h_a, C_a, t_sk, h_st, w_st, t_st, N_st, t_sp, st_cord, cg):
     I_zz = sum(I_zz)
     return(I_zz)
 
-def I_yy(h_a, C_a, t_sk, h_st, w_st, t_st, N_st, t_sp, st_cord, cg):
-    
-    h_a = h_a/100
-    t_sk = t_sk/1000
-    h_st = h_st/100
-    w_st = w_st/100
-    t_st = t_st/1000
-    t_sp = t_sp/1000
+def I_yy(st_cord, cg):
+
     
     # Create a list to store all elements which need to be summed.
     I_yy = []

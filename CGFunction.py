@@ -8,16 +8,12 @@ This document contains a function to calculate the CG of the cross section of
 a aileron given by the group assignment of the SVV course (AE3212-II).
 """
 import numpy as np
+from aircraft_data import*
 
-def centroid(h_a, C_a, t_sk, h_st, w_st, t_st, N_st, t_sp):
+def centroid():
     "This function calculates the y location of the aileorn's cross section w.r.t. the centroid of the spars."
     # Rewrite all variable for unit x to meters.
-    h_a = h_a/100
-    t_sk = t_sk/1000
-    h_st = h_st/100
-    w_st = w_st/100
-    t_st = t_st/1000
-    t_sp = t_sp/1000
+
     
     # Creating radius variable to make code more readable.
     r_a = 0.5*h_a
