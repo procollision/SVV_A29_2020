@@ -1,6 +1,7 @@
 import numpy as np
-from integrate import *
+#from integrate import *
 from aircraft_data import h_a,C_a
+from interpolate import *
 
 def integrate(func,dt,bounds):
     x_list = np.arange(bounds[0],bounds[1]+dt,dt)
@@ -38,8 +39,7 @@ def get_interp_cord(Nz,Nx,Ca,la):
     return thz,z,thx,x
 
 def interp_funct(x,z):
-    #k = get_funct(x,y)
-    k=[1,0,0,0]
+    k = get(x,y)
     return k[0]+k[1]*x+k[2]*z+k[3]*z*x
 
 def slice_func_y(func,val):
@@ -80,3 +80,21 @@ def Find_attach_N(N,l_a,x1,x2,x3,x_a):
     N_x3 = int(x3//h)
     return N_x1,N_ac_1,N_x2,N_ac_2,N_x3
 
+def getCon(X,Z):
+    
+    i = 0
+    
+    while X >= x[i]:
+        i += 1
+    index = i-1
+    
+    #print(index)
+    I = 0
+    
+    while Z <= z[I]:
+        I += 1
+    
+    IndexZ = I-1
+    #print(IndexZ)
+    
+    return interpolate()[IndexZ][index]  
