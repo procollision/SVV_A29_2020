@@ -7,9 +7,10 @@ Created on Mon Feb 24 17:00:04 2020
 import numpy as np
 from scipy.sparse import csr_matrix, linalg
 import matplotlib.pyplot as plt
+import support_function as sup
 from aircraft_data import *
 
-def Create_FD_Matrix(N):
+def Create_FD_Matrix(N,dtz):
     h = l_a/N
     EXT = 3
     COM = 1
@@ -26,12 +27,17 @@ def Create_FD_Matrix(N):
     fx1s = [[0,1,2],[-3,4,-1]]
     #other defenitions
     shift =[0,N+EXT]
-    theta = np.pi/8
+    theta = 0
     turn = [np.cos(theta),np.sin(theta)]
     rturn = [np.sin(theta),np.cos(theta)]
 
     I =[1,1]
+
+    #--- Aerodynimc data
+    for i in range(0,N):
+        V[i] = sup.get_w([h*i],dtz)/(E*I[0])
     
+
     for dim in range(len(shift)):
         sh = shift[dim]
         # Fill matrix with fintite diffrence scheme for x''''
@@ -67,13 +73,16 @@ def Create_FD_Matrix(N):
             M[sh+N_sp[0][i],sh+N+i] = -1/(E*I[dim]*h)
             M[sh+N+i,sh+N_sp[0][i]] = 1
 
-        #--- additional Forces
+        #--- additional coupling for the actuators
         N_a1 = round((x_2-(x_a/2))/h)
+        N_a2 = round((x_2+(x_a/2))/h)
         M[sh+N_a1,-1] = -1/(E*I[dim]*h)*rturn[dim]
         M[-1,sh+N_a1] = rturn[dim]
         V[-1,0] = 0
-    
+        V[sh+N_a2,0] -= rturn[dim]*P/(E*I[dim]*h)
 
+        
+    
     X = linalg.spsolve(M,V)
     
 
@@ -106,8 +115,6 @@ def Create_FD_Matrix(N):
         for k in range(len(fx1s[0])):
                 Vi[j][-1] += fx1s[1][k]*Mi[j][-1-fx1s[0][k]]/(2*h)
 
-    print([x_1,x_2,x_3])
-    print(Vr)
     plt.plot(np.arange(0,l_a,h),Mi[0])
     plt.plot(np.arange(0,l_a,h),Mi[1])
     plt.show()
@@ -116,7 +123,7 @@ def Create_FD_Matrix(N):
     plt.show()
     return Mi,Vi,Vr,Va
 
-X = Create_FD_Matrix(1000)
+X = Create_FD_Matrix(1000,0.001)
 
 
 
