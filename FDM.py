@@ -14,19 +14,23 @@ def Create_FD_Matrix(N):
     EXT = 3
     COM = 1
     # Create (empty) sparse matrix of the required size
-    
+
     V = np.zeros((N*2+EXT*2+COM,1))
     M = csr_matrix((N*2+EXT*2+COM,N*2+EXT*2+COM))
-    
     #Finite diffrence schemes defenition
     fx4 = [[-2,-1,0,1,2],[1,-4,6,-4,1]]
     fx3 = [[0,1,2,3,4],[-5,18,-24,14,-3]]
     fx2 = [[0,1,2,3],[2,-5,4,-1]]
+    fx2c = [[-1,0,1],[1,-2,1]]
+    fx1c = [[-1,1],[-1,1]]
+    fx1s = [[0,1,2],[-3,4,-1]]
+    #other defenitions
     shift =[0,N+EXT]
-    theta = 0
+    theta = np.pi/8
     turn = [np.cos(theta),np.sin(theta)]
     rturn = [np.sin(theta),np.cos(theta)]
-    I =[0.005,1]
+
+    I =[1,1]
     
     for dim in range(len(shift)):
         sh = shift[dim]
@@ -71,11 +75,46 @@ def Create_FD_Matrix(N):
     
 
     X = linalg.spsolve(M,V)
-    Z = X[:-N-2*EXT-COM]
-    Y = X[N+EXT:-EXT-COM]
+    
+
+    d = [X[:-N-2*EXT-COM],X[N+EXT:-EXT-COM]]
+    Z = d[0]
     Vr = [X[N:N+EXT],X[2*N+EXT:2*N+2*EXT]]
     Va = X[-1]
-    return Z,Y,Vr,Va
+    #-- Compute moments by taking the second derivative of deflection
+    Mi = np.zeros([2,np.shape(Z)[0]])
+    for j in range(2):
+        for i in range(1,len(Z)-1):
+            for k in range(len(fx2c[0])):
+                Mi[j][i] += fx2c[1][k]*d[j][i+fx2c[0][k]]/(h**2)
+        
+        for k in range(len(fx2[0])):
+                Mi[j][0] += fx2[1][k]*d[j][0+fx2[0][k]]/(h**2)
+            
+        for k in range(len(fx2[0])):
+                Mi[j][-1] += fx2[1][k]*d[j][-1-fx2[0][k]]/(h**2)
+    #-- Compute Shear by taking first derivative of Moment 
+    Vi = np.zeros([2,np.shape(Z)[0]])
+    for j in range(2):
+        for i in range(1,len(Z)-1):
+            for k in range(len(fx1c[0])):
+                Vi[j][i] += fx1c[1][k]*Mi[j][i+fx1c[0][k]]/(2*h)
+
+        for k in range(len(fx1s[0])):
+                Vi[j][0] += fx1s[1][k]*Mi[j][0+fx1s[0][k]]/(2*h)
+            
+        for k in range(len(fx1s[0])):
+                Vi[j][-1] += fx1s[1][k]*Mi[j][-1-fx1s[0][k]]/(2*h)
+
+    print([x_1,x_2,x_3])
+    print(Vr)
+    plt.plot(np.arange(0,l_a,h),Mi[0])
+    plt.plot(np.arange(0,l_a,h),Mi[1])
+    plt.show()
+    plt.plot(np.arange(0,l_a,h),Vi[0])
+    plt.plot(np.arange(0,l_a,h),Vi[1])
+    plt.show()
+    return Mi,Vi,Vr,Va
 
 X = Create_FD_Matrix(1000)
 
