@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 
 def integrate(func,dt,bounds):
     x_list = np.arange(bounds[0],bounds[1]+dt,dt)

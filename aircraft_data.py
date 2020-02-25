@@ -17,9 +17,12 @@ d_2 = 0
 d_3 = 1.642
 theta = 26
 P = 91.7
+E=72
+data_name="aerodynamicloada320.dat"
 
 x_a = x_a/100
 h_a = h_a/100
+r = h_a/2
 t_sk = t_sk/1000
 t_sp = t_sp/1000
 t_st = t_st/1000
@@ -30,7 +33,7 @@ d_2 = d_2/100
 d_3 = d_3/100
 theta = theta*np.pi/180
 P = P*1000
-
+E=E*10**6
 
 
 
