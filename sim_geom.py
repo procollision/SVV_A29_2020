@@ -1,6 +1,6 @@
 import numpy as np
 
-def get_geom(r,cl,ts,tb,dt,s_space):
+def get_geom(r,cl,ts,tb,dt,s_space,CG_z):
     y1 = []
     y1_bounds = []
     y1_thickness = []
@@ -43,7 +43,7 @@ def get_geom(r,cl,ts,tb,dt,s_space):
     y2_stringer_index = []
 
     y2_bounds.append([0,r])
-    y2.append(lambda s: s)
+    y2.append(lambda s: s-CG_y)
     y2_thickness.append(tb)
     y2_stringer.append(0)
     y2_dt_list.append(dt)
@@ -86,7 +86,7 @@ def get_geom(r,cl,ts,tb,dt,s_space):
     z1_stringer_index = []
 
     z1_bounds.append([0,np.pi/2])
-    z1.append(lambda theta: r*r*np.cos(theta))
+    z1.append(lambda theta: r*r*np.cos(theta)-CG_z)
     z1_thickness.append(ts)
     z1_stringer.append(1)
     z1_dt_list.append(dt/r)
@@ -94,7 +94,7 @@ def get_geom(r,cl,ts,tb,dt,s_space):
     z1_stringer_index.append(range(0,3))
 
     z1_bounds.append([0,2*r])
-    z1.append(lambda s: 0)
+    z1.append(lambda s: 0-CG_z)
     z1_thickness.append(tb)
     z1_stringer.append(0)
     z1_dt_list.append(dt)
@@ -102,7 +102,7 @@ def get_geom(r,cl,ts,tb,dt,s_space):
     z1_stringer_index.append([0])
 
     z1_bounds.append([0,np.pi/2])
-    z1.append(lambda theta: r*r*np.cos(theta)-r)
+    z1.append(lambda theta: r*r*np.cos(theta)-r-CG_z)
     z1_thickness.append(ts)
     z1_stringer.append(1)
     z1_dt_list.append(dt/r)
@@ -120,7 +120,7 @@ def get_geom(r,cl,ts,tb,dt,s_space):
     z2_stringer_index = []
 
     z2_bounds.append([0,r])
-    z2.append(lambda s: 0)
+    z2.append(lambda s: 0-CG_z)
     z2_thickness.append(tb)
     z2_stringer.append(0)
     z2_dt_list.append(dt)
@@ -128,7 +128,7 @@ def get_geom(r,cl,ts,tb,dt,s_space):
     z2_stringer_index.append([0])
 
     z2_bounds.append([0,np.sqrt(r*r+(cl-r)*(cl-r))])
-    z2.append(lambda s: -s*np.sqrt((cl/r-1)*(cl/r-1)+1))
+    z2.append(lambda s: -s*np.sqrt((cl/r-1)*(cl/r-1)+1)-CG_z)
     z2_thickness.append(ts)
     z2_stringer.append(1)
     z2_dt_list.append(dt)
@@ -136,7 +136,7 @@ def get_geom(r,cl,ts,tb,dt,s_space):
     z2_stringer_index.append(range(3,9))
 
     z2_bounds.append([0,np.sqrt(r*r+(cl-r)*(cl-r))])
-    z2.append(lambda s: s*np.sqrt((cl/r-1)*(cl/r-1)+1)-(cl-r))
+    z2.append(lambda s: s*np.sqrt((cl/r-1)*(cl/r-1)+1)-(cl-r)-CG_z)
     z2_thickness.append(ts)
     z2_stringer.append(1)
     z2_dt_list.append(dt)
@@ -144,7 +144,7 @@ def get_geom(r,cl,ts,tb,dt,s_space):
     z2_stringer_index.append(range(9,15))
 
     z2_bounds.append([0,r])
-    z2.append(lambda s: 0)
+    z2.append(lambda s: 0-CG_z)
     z2_thickness.append(tb)
     z2_stringer.append(0)
     z2_dt_list.append(dt)
