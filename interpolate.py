@@ -97,6 +97,6 @@ def interpolate():
             
             for l in range(4):
                 K[c][j][l] = k[l]    #creates the constants for 40 sets of points, thus creates a row
-    return K
+    return K,z,x
    
 #print(interpolate()[1][1])

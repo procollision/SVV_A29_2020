@@ -119,8 +119,6 @@ def centroid():
     print(sum(Ay_til))
     # Divide the elements of the Ay_til list with the A list, to obtain z coordinate of the cg. 
     cg_z = sum(Ay_til)/sum(A)
-    cg.append(cg_z)
-    cg += [0]
     
-    return(st_cord, cg)
+    return(st_cord, [0,cg_z])
 
