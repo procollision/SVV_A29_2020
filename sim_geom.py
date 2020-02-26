@@ -18,7 +18,7 @@ def get_geom(r,cl,ts,tb,dt,s_space,CG_z):
     y1_stringer_index.append(range(0,3))
 
     y1_bounds.append([0,2*r])
-    y1.append(lambda s: -r*s+r)
+    y1.append(lambda s: -s+r)
     y1_thickness.append(tb)
     y1_stringer.append(0)
     y1_dt_list.append(dt)
@@ -26,7 +26,7 @@ def get_geom(r,cl,ts,tb,dt,s_space,CG_z):
     y1_stringer_index.append([0])
 
     y1_bounds.append([0.0,np.pi/2])
-    y1.append(lambda theta: r*r*np.sin(theta-r))
+    y1.append(lambda theta: -r*r*np.cos(theta))
     y1_thickness.append(ts)
     y1_stringer.append(1)
     y1_dt_list.append(dt/r)
@@ -43,7 +43,7 @@ def get_geom(r,cl,ts,tb,dt,s_space,CG_z):
     y2_stringer_index = []
 
     y2_bounds.append([0,r])
-    y2.append(lambda s: s-CG_y)
+    y2.append(lambda s: s)
     y2_thickness.append(tb)
     y2_stringer.append(0)
     y2_dt_list.append(dt)

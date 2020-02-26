@@ -51,12 +51,16 @@ def get_q_shear(dt):
                 #evaluate integral int y ds
                 
                 if ei!= 0:
-                    q_list = sup.integrate(func,ds,bounds)*t + final_qlist[di][ci][ei-1][-1] #for the correct shear flow 
+                    #q_list = sup.integrate(func,ds,bounds)*t + final_qlist[di][ci][ei-1][-1] #for the correct shear flow 
+                    q_list = sup.integrate(func,ds,bounds)*t + q_list[-1] #for the correct shear flow 
                     #print("final_qlist %s" % final_qlist[di][ci][ei-1][-1])
+                elif ci == 1 and ei ==0:
+                    q_list = sup.integrate(func,ds,bounds)*t + final_qlist[0][0][1][round(len(final_qlist[0][0][1])/2)]
                 else:
                     q_list = sup.integrate(func,ds,bounds)*t
                 
                 #generate the number of B's included in the domain
+                
                 for i in range(len(s_list)):
                     if stringer == 1:
                         #print(int((s_list[i]+offset)/(stringer_spacing*ds/dt)))
@@ -64,22 +68,25 @@ def get_q_shear(dt):
                         B_index[i] = np.append(B_final,B_list[:int((s_list[i]+offset)/(stringer_spacing*ds/dt))])
                     else:
                         B_index[i]= B_final
-            
-                #add the terms for the stringers
                 
-                for i in range(len(q_list)):
+                #add the terms for the stringers
+                sq_list = q_list.copy()
+                for i in range(len(sq_list)):
                     tempsum = 0
                     for k in B_index[i]:
                         #print(CG)                     
                         tempsum += stringer_cord_array[int(k)][di]#+CG[di]
-                    q_list[i] += stringer_area*tempsum
+                    sq_list[i] = stringer_area*tempsum
                 
                 B_final = B_index[-1]
                 
-                if ci == 1:
-                    q_list += final_qlist[0][0][1][round(len(final_qlist[0][0][1])/2)] 
 
-                final_qlist[di][ci][ei]=q_list
+                final_qlist[di][ci][ei]=q_list+sq_list
+                str_label = "dim"+str(di)+" ci"+str(ci)+" ei"+str(ei)
+                if False:
+                    plt.plot(np.arange(bounds[0],bounds[1],ds),final_qlist[di][ci][ei],label=str_label)
+    #plt.legend()
+    #plt.show()
     return final_qlist
 
-#final_qlist = get_q_shear(0.001)
+final_qlist = get_q_shear(0.001)
