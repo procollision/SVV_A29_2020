@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import support_function as sup
 from aircraft_data import *
 
-def Create_FD_Matrix(N,dtz):
+def bending_solve(N,dtz):
     h = l_a/N
     EXT = 3
     COM = 1
@@ -27,7 +27,7 @@ def Create_FD_Matrix(N,dtz):
     fx1s = [[0,1,2],[-3,4,-1]]
     #other defenitions
     shift =[0,N+EXT]
-    theta = 0
+    theta = np.pi/4
     turn = [np.cos(theta),np.sin(theta)]
     rturn = [np.sin(theta),np.cos(theta)]
 
@@ -35,7 +35,8 @@ def Create_FD_Matrix(N,dtz):
 
     #--- Aerodynimc data
     for i in range(0,N):
-        V[i] = sup.get_w([h*i],dtz)/(E*I[0])
+        #V[i] = sup.get_w([h*i],dtz)/(E*I[0])
+        V[i] = 0
     
 
     for dim in range(len(shift)):
@@ -95,13 +96,14 @@ def Create_FD_Matrix(N,dtz):
     for j in range(2):
         for i in range(1,len(Z)-1):
             for k in range(len(fx2c[0])):
-                Mi[j][i] += fx2c[1][k]*d[j][i+fx2c[0][k]]/(h**2)
+                Mi[j][i] += fx2c[1][k]*d[j][i+fx2c[0][k]]/(h**2)*E*I[j]
         
         for k in range(len(fx2[0])):
-                Mi[j][0] += fx2[1][k]*d[j][0+fx2[0][k]]/(h**2)
+                Mi[j][0] += fx2[1][k]*d[j][0+fx2[0][k]]/(h**2)*E*I[j]
             
         for k in range(len(fx2[0])):
-                Mi[j][-1] += fx2[1][k]*d[j][-1-fx2[0][k]]/(h**2)
+                Mi[j][-1] += fx2[1][k]*d[j][-1-fx2[0][k]]/(h**2)*E*I[j]
+
     #-- Compute Shear by taking first derivative of Moment 
     Vi = np.zeros([2,np.shape(Z)[0]])
     for j in range(2):
@@ -123,8 +125,7 @@ def Create_FD_Matrix(N,dtz):
     plt.show()
     return Mi,Vi,Vr,Va
 
-X = Create_FD_Matrix(1000,0.001)
-
+bending_solve(1000,0.01)
 
 
 
