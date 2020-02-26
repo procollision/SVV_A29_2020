@@ -112,7 +112,7 @@ def centroid():
             z_tst = r_a*np.cos(alpha) * -1
             st_ycord.append(z_tst)
     
-    st_cord = list(zip(st_zcord,st_ycord))
+    st_cord = list(zip(st_ycord,st_zcord))
     # Multiply all elements of the area list with the y_til list
     Ay_til = [a*b for a, b in zip(A, y_til)]
     print(Ay_til)
