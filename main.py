@@ -1,4 +1,4 @@
-import FDM
+import FDM_test as FDM
 import torsion as TORS
 import CGFunction as CG
 import Ifunction as IFUNC
@@ -13,8 +13,9 @@ dts = 0.001
 
 st_cord,cg = CG.centroid()
 I = [IFUNC.I_zz(st_cord,cg),IFUNC.I_yy(st_cord,cg)]
-Mi,Vi,Vr,Va = FDM.bending_solve(N,I,dtz)
+print(I)
+Mi,Vi,Ti,Vr,Va = FDM.bending_solve(N,I,dtz,dtx)
 print("bending done")
-q = TORS.get_q(Vi,N,I,dtx,dtz,dts,Vr,Va)
+q = TORS.get_q(Vi,Ti,N,I,dtx,dtz,dts,Vr,Va)
 print("shear done")
-
+PLOT.plot([q[round()],q[2],q[3]],dts,[2,2])
