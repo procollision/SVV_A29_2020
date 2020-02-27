@@ -1,13 +1,14 @@
 import numpy as np
 
 def get_arm(r,cl,ts,tb,dt,s_space):
+    slen = np.sqrt(r*r+(cl-r)*(cl-r))
     y1 = []
     y1_bounds = []
     y1_dt_list = []
     #yi.append are the arms of the shearflow
 
     y1_bounds.append([0,np.pi/2])
-    y1.append(lambda theta: r*r)
+    y1.append(lambda theta: r)
     y1_dt_list.append(dt/r)
 
     y1_bounds.append([0,2*r])
@@ -16,7 +17,7 @@ def get_arm(r,cl,ts,tb,dt,s_space):
 
 
     y1_bounds.append([-np.pi/2,0])
-    y1.append(lambda theta: -r*r)
+    y1.append(lambda theta: r)
     y1_dt_list.append(dt/r)
 
     y2 = []
@@ -27,12 +28,12 @@ def get_arm(r,cl,ts,tb,dt,s_space):
     y2.append(lambda s: 0)
     y2_dt_list.append(dt)
 
-    y2_bounds.append([0,np.sqrt(r*r+(cl-r)*(cl-r))])
-    y2.append(lambda s: (((np.sqrt(r*r+(cl-r)*(cl-r))-s)*r+s*(cl-r))/np.sqrt(r*r+(cl-r)*(cl-r))))
+    y2_bounds.append([0,slen])
+    y2.append(lambda s: r)
     y2_dt_list.append(dt)
 
-    y2_bounds.append([0,np.sqrt(r*r+(cl-r)*(cl-r))])
-    y2.append(lambda s: (((np.sqrt(r*r+(cl-r)*(cl-r))-s)*(cl-r)+s*r)/np.sqrt(r*r+(cl-r)*(cl-r))))
+    y2_bounds.append([0,slen])
+    y2.append(lambda s: r)
     y2_dt_list.append(dt)
 
     y2_bounds.append([0,r])
