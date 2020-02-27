@@ -9,8 +9,9 @@ from scipy.sparse import csr_matrix, linalg
 import matplotlib.pyplot as plt
 import support_function as sup
 from aircraft_data import *
+from interpolate import *
 
-def bending_solve(N,dtz):
+def bending_solve(N,I,dtz):
     h = l_a/N
     EXT = 3
     COM = 1
@@ -27,16 +28,16 @@ def bending_solve(N,dtz):
     fx1s = [[0,1,2],[-3,4,-1]]
     #other defenitions
     shift =[0,N+EXT]
-    theta = np.pi/4
+    
     turn = [np.cos(theta),np.sin(theta)]
     rturn = [np.sin(theta),np.cos(theta)]
 
-    I =[1,1]
-
+    K,zl,xl = interpolate()
+    other = [xl,zl,K]
     #--- Aerodynimc data
     for i in range(0,N):
-        #V[i] = sup.get_w([h*i],dtz)/(E*I[0])
-        V[i] = 0
+        V[i] = sup.get_w([h*i],dtz,other)/(E*I[0])
+        #V[i] = 0
     
 
     for dim in range(len(shift)):
@@ -125,7 +126,6 @@ def bending_solve(N,dtz):
     plt.show()
     return Mi,Vi,Vr,Va
 
-bending_solve(1000,0.01)
 
 
 

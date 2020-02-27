@@ -1,9 +1,9 @@
 import numpy as np
 import support_function as sup
-from shear2 import *
+import shear2 as SHEAR
 from aircraft_data import *
 from interpolate import *
-
+import Shearcenter as SC_center
 
 def get_q_mat():
     A_1 = 0.5*np.pi*r*r
@@ -14,19 +14,23 @@ def get_q_mat():
     A = np.array([[2*A_1,2*A_2],[St_1/A_1+St_12/A_2,-(St_2/A_2+St_12/A_1)]]) 
     return np.linalg.inv(A)
 
+def q_reshape(q):
+    return [q[0][1],q[1][1],q[1][2],q[0][2],q[0][1]]
+
+
 def get_q(V,N,I,dtx,dtz,dts,Vr,Va):
     A = get_q_mat()
     h = sup.Aileron_Sectionwidth(l_a,N)
     Nt = int(C_a/dtz)
     N_x1,N_ac_1,N_x2,N_ac_2,N_x3 = sup.Find_attach_N(N,l_a,x_1,x_2,x_3,x_a)
     T = np.array([0.0]*N)
-    q = get_q_shear(dts)
+    q = SHEAR.get_q_shear(dts)
     K, zl, xl = interpolate()
     other = [xl,zl,K]
     new_q = np.empty([N,2,4]).tolist()
-    SC = 0
+    out_q = [[]]*N
+    SC = SC_center.get_sc(dts)
     q0 = np.zeros([N,2])
-    P = 0
     for i in range(1,N):
         if i== N_x1:
             T[i] = -Vr[0][0]*(r+SC)
@@ -42,16 +46,42 @@ def get_q(V,N,I,dtx,dtz,dts,Vr,Va):
             T[i]+=sup.integrate(sup.slice_func_x(sup.interp_funct,dtz*k,other),dtx,[i*h,(i+1)*h])[-1]*dtz*(k*dtz-SC)
         T[i] += T[i-1]
         q0[i] = np.dot(A,np.array([T[i],0]))
+
+        #----- COMBINE SHEAR FROM TORSION AND INTERNAL SHEAR -----
         for ci in range(2):
             for ei in range(len(q[0][ci])):
-                new_q[i][ci][ei] = q[0][ci][ei]*V[0][i]/I[0] + q[1][ci][ei]*V[1][i]/I[1]+q0[i][ci]
-    print(T[-1])
+                if ci == 0:
+                    if ei == 0:
+                        qz = q[1][1][0]*V[1][i]/I[1]
+                    elif ei == 1:
+                        qz = np.append(np.flip(q[1][0][0])[:-1],q[1][0][0])*V[1][i]/I[1]
+                    else:
+                        qz = -np.flip(q[1][1][0]*V[1][i]/I[1])
+                else:
+                    if ei == 0:
+                        qz = q[1][0][0]*V[1][i]/I[1]
+                    elif ei == 1:
+                        qz = q[1][1][1]*V[1][i]/I[1]
+                    elif ei == 2:
+                        qz = -np.flip(q[1][1][1]*V[1][i]/I[1])
+                    else:
+                        qz = -np.flip(q[1][0][0]*V[1][i]/I[1])
+                #print(np.shape(qz),np.shape(q[0][ci][ei]),ci,ei)
+                condition = (ci==0 and ei==1) or (ci==1 and (ei==0 or ei==3))
+                if condition:
+                    new_q[i][ci][ei] = q[0][ci][ei]*V[0][i]/I[0] + qz + q0[i][ci]-q0[i][-ci-1]
+                else:
+                    new_q[i][ci][ei] = q[0][ci][ei]*V[0][i]/I[0] + qz + q0[i][ci]
+        out_q[i] = q_reshape(new_q[i])
+    #print(q[-1])
+    """
     plt.plot(np.linspace(0,l_a,N),T)
     plt.xlabel("x coordinate [m]")
     plt.ylabel("Torsion under even distributed load [Nm]")
-    plt.show()
+    plt.show()"""
     return new_q
 
+"""
 N = 1000
 V = np.ones([2,N])
-test = get_q(V,N,[1,1],0.001,0.001,0.001,[[0.,0.,0.],[0.,0.,0.]],0.)
+test = get_q(V,N,[1,1],0.01,0.01,0.001,[[0.,0.,0.],[0.,0.,0.]],0.)"""

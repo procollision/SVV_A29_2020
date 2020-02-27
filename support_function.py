@@ -42,8 +42,8 @@ def interp_funct(x,z,other):
     xl = other[0]
     zl = other[1]
     K = other[2]
-    #k = getCon(x,z,xl,zl,K)
-    k = [1,0,0,0]
+    k = getCon(x,z,xl,zl,K)*1000
+    #k = [1,0,0,0]
     return k[0]+k[1]*x+k[2]*z+k[3]*z*x
 
 def slice_func_y(func,val,other):

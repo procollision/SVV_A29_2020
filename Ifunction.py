@@ -8,7 +8,7 @@ import numpy as np
 from aircraft_data import *
 
 def I_zz(st_cord, cg):
-
+    print(N_st)
     # Create a list to store all elements which need to be summed.
     I_zz = []
     # Defines the list for the z coordinates of the stringers and the z location of the cg.

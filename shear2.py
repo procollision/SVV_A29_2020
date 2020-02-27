@@ -1,7 +1,7 @@
 import numpy as np 
 import matplotlib.pyplot as plt
 import support_function as sup
-from test_geom import *
+from sim_geom import *
 from CGFunction import *
 from aircraft_data import *
 
@@ -53,8 +53,6 @@ def get_q_shear(dt):
                     q_list = sup.integrate(func,ds,bounds)*t + q_list[-1] #for the correct shear flow 
                 else:
                     q_list = sup.integrate(func,ds,bounds)*t
-                    print(di,ci,ei)
-                    print(q_list[0])
                 
                 #generate the number of B's included in the domain
                 
@@ -80,10 +78,10 @@ def get_q_shear(dt):
 
                 final_qlist[di][ci][ei]=q_list+sq_list
                 str_label = " cell number"+str(ci)+" element number"+str(ei)
-                if di==1 and ci == 1:
+                if False:
                     plt.plot(np.arange(bounds[0],bounds[1],ds),final_qlist[di][ci][ei],label=str_label)
-    plt.legend()
-    plt.show()
+    #plt.legend()
+    #plt.show()
     return final_qlist
 
-final_qlist = get_q_shear(0.001)
+#final_qlist = get_q_shear(0.001)

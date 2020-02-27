@@ -28,13 +28,13 @@ def centroid():
     # Calculating the area of the semicircle.
     A_sc = 0.5*np.pi*((r_a)**2-((r_a)-t_sk)**2)
     A.append(A_sc)
-    print('Area of the semicircle is ' + str(A_sc))
+    #print('Area of the semicircle is ' + str(A_sc))
     
     # Calculatin the length & area of the skin.
     L_sk = ((r_a)**2+(C_a-r_a)**2)**0.5    # Length of the skin, using pythagoras.
     A_sk = L_sk*t_sk
     A += 2*[A_sk]
-    print(L_sk, A_sk)
+    #print(L_sk, A_sk)
     # Calculating the area of the spar.
     A_sp = h_a*t_sp
     A.append(A_sp)
@@ -43,17 +43,17 @@ def centroid():
     A_st = (h_st*t_st)+(w_st*t_st)
     # Append A_st, N_st times to a list.
     A += N_st*[A_st]
-    print(A_st)
+    #print(A_st)
     # Calculating y_tilde for the semicircle.
     y_tsc = (4*r_a)/(3*np.pi)
     y_til.append(y_tsc)
-    print(y_tsc)
+    #print(y_tsc)
     # Calculating y_tilde for the skin.
     phi = np.arctan((r_a)/(C_a - r_a))
     y_tsk = -0.5*L_sk*np.cos(phi)
     y_til += 2*[y_tsk]
     
-    print(y_tsk)
+    #print(y_tsk)
     # Calculating y_tilde for the spar.
     y_tsp = 0                               # Due to reference frame this will always be zero.
     y_til.append(y_tsp)                     # Done such that both the list A and y_til will be of equal length.
@@ -115,8 +115,8 @@ def centroid():
     st_cord = list(zip(st_ycord,st_zcord))
     # Multiply all elements of the area list with the y_til list
     Ay_til = [a*b for a, b in zip(A, y_til)]
-    print(Ay_til)
-    print(sum(Ay_til))
+    #print(Ay_til)
+    #print(sum(Ay_til))
     # Divide the elements of the Ay_til list with the A list, to obtain z coordinate of the cg. 
     cg_z = sum(Ay_til)/sum(A)
     

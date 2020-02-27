@@ -1,5 +1,4 @@
 import numpy as np
-from geom2 import *
 from CGFunction import *
 from aircraft_data import *
 from shear2 import *
@@ -15,7 +14,7 @@ def get_sc(dt):
     stringer_spacing = (r*np.pi+2*np.sqrt((C_a-r)*(C_a-r)+r*r))/N_st
     
     #the geometry beeing analysed 
-    geometry = get_geom(r,C_a,t_sk,t_sp,dt,stringer_spacing)
+    #geometry = get_geom(r,C_a,t_sk,t_sp,dt,stringer_spacing)
     st_cord, cg = centroid()
     #creat the final list
     moment_list = []
