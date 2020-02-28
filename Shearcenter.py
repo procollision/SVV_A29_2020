@@ -57,20 +57,20 @@ def get_sc(dt):
     eta =  np.sum(moment_list)/I_zz(st_cord, cg)
     return eta
 
-eta =get_sc(0.01*np.pi)
+eta =r - get_sc(0.01*np.pi)
 
 st_cord, cg = centroid()
 #verivication of the shear center. If the verification geometry is used the
 #analytical eta needs to be compaired with eta. Else the eta2 indicates the shearcenter 
 #as been taken from the aileron crossection of an boeing 737
-eta_arm = .1125 - 0.119227065644352412
+eta_arm = 0.119227065644352412
 
-print("eta %s" % eta)
+print("eta %s" % (eta))
 print("eta2 %s" % eta_arm)
 eta2 = C_a*C_a*r*r*t_sp/I_zz(st_cord, cg)
 print("analytical eta %s" % eta2)
 print("error with analythical solution %s" % ((eta - eta2)/eta))
-print("error with verification model %s" % ((eta - eta_arm)/eta))
+print("error with verification model %s" % ((eta_arm- eta)/(eta_arm)))
 
 
 
