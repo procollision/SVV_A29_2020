@@ -8,7 +8,7 @@ def get_arm(r,cl,ts,tb,dt,s_space):
     #yi.append are the arms of the shearflow
 
     y1_bounds.append([0,np.pi/2])
-    y1.append(lambda theta: r)
+    y1.append(lambda theta: r*r)
     y1_dt_list.append(dt/r)
 
     y1_bounds.append([0,2*r])
@@ -17,7 +17,7 @@ def get_arm(r,cl,ts,tb,dt,s_space):
 
 
     y1_bounds.append([-np.pi/2,0])
-    y1.append(lambda theta: r)
+    y1.append(lambda theta: r*r)
     y1_dt_list.append(dt/r)
 
     y2 = []
